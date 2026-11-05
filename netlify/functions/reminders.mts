@@ -16,7 +16,8 @@ function shift(iso: string, days: number) {
 }
 
 export default async () => {
-  const { SUPABASE_URL, SUPABASE_SECRET_KEY, SITE_URL } = process.env;
+  const { SUPABASE_URL, SUPABASE_SECRET_KEY } = process.env;
+  const SITE_URL = process.env.URL || process.env.SITE_URL; // Netlify sets URL to the live address
   const send = getMailer();
   if (!SUPABASE_URL || !SUPABASE_SECRET_KEY || !send) return new Response('Reminders not configured');
 

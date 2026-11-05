@@ -32,9 +32,12 @@ export default async (req: Request) => {
 
   // Send the client back to the site the coach is using: the live site, or a local dev server.
   // (It must also be listed in Supabase > Authentication > URL configuration > Redirect URLs.)
+  // Netlify sets URL (the site's main address) and DEPLOY_PRIME_URL itself, so the live site works
+  // even if SITE_URL still points at localhost.
   const origin = req.headers.get('origin') ?? '';
-  const siteOrigin = new URL(SITE_URL).origin;
-  const redirectTo = origin === siteOrigin || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ? origin : siteOrigin;
+  const known = [SITE_URL, process.env.URL, process.env.DEPLOY_PRIME_URL].filter(Boolean).map((u) => new URL(u!).origin);
+  const siteOrigin = process.env.URL ? new URL(process.env.URL).origin : new URL(SITE_URL).origin;
+  const redirectTo = known.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ? origin : siteOrigin;
 
   const options = { data: { full_name: name, session_date: sessionDate ?? '' }, redirectTo };
   let { data: link, error } = await admin.auth.admin.generateLink({ type: 'invite', email, options });
