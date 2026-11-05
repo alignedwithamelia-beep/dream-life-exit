@@ -1,0 +1,20 @@
+-- Demo checklist content. Replace with the real list from the coach.
+insert into task_templates (category, title, priority, sort) values
+('Visas & Immigration','Research official immigration pathways','high',10),
+('Visas & Immigration','Check eligibility requirements with authoritative sources','high',11),
+('Visas & Immigration','Gather documents needed for your application','high',12),
+('Visas & Immigration','Track application or appointment dates where applicable','high',13),
+('Finances','Estimate relocation costs','high',20),
+('Finances','Research destination living costs','high',21),
+('Finances','Review savings','high',22),
+('Finances','Plan an emergency fund','high',23),
+('Finances','Research relevant banking and tax considerations','high',24),
+('Family & Education','Research schooling or childcare','medium',30),
+('Family & Education','Request school records','medium',31),
+('Insurance & Health','Get insurance quotes','medium',40),
+('Insurance & Health','Gather medical records and prescriptions','medium',41),
+('Identity & Passports','Check passport validity for every household member','high',50),
+('Identity & Passports','Locate marriage and birth certificates','medium',51),
+('Flights & Travel','Shortlist flight options','low',60),
+('Home & Belongings','Decide what to sell, store or ship','medium',70),
+('Home & Belongings','Notify your landlord or plan your home sale','medium',71);
