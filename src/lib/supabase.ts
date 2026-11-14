@@ -14,4 +14,7 @@ export type ProfileRow = {
   email: string | null;
   access: 'invited' | 'active' | 'paused';
   session_date: string | null;
+  membership?: 'none' | 'trialing' | 'active' | 'past_due' | 'canceled';
+  membership_renews_at?: string | null;
+  stripe_customer_id?: string | null;
 };

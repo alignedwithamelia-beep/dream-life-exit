@@ -33,6 +33,8 @@ type Ctx = {
   leave: () => Promise<void>;
   theme: ThemeMode;
   toggleTheme: () => void;
+  /** Re-reads the signed-in profile (e.g. membership after paying). */
+  refreshAccount: () => Promise<void>;
 };
 
 const HubCtx = createContext<Ctx>(null as unknown as Ctx);
@@ -153,7 +155,7 @@ export function HubProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (mode !== 'remote' || !supabase || !account || account.role !== 'client' || !loadedRemote.current) return;
     const timer = setTimeout(async () => {
-      const { plan, coach: _c, ...rest } = state;
+      const { plan, coach: _c, club: _club, ...rest } = state;
       const stats = checklistStats(state.tasks);
       lastPlan.current = JSON.stringify(plan);
       const [a, b] = await Promise.all([
@@ -185,6 +187,12 @@ export function HubProvider({ children }: { children: ReactNode }) {
       .subscribe();
     return () => { supabase!.removeChannel(ch); };
   }, [mode, account, toast]);
+
+  const refreshAccount = useCallback(async () => {
+    if (!supabase || !accountId.current) return;
+    const { data } = await supabase.from('profiles').select('*').eq('id', accountId.current).maybeSingle();
+    if (data) setAccount(data as ProfileRow);
+  }, []);
 
   // ---- Actions ----
   const startFresh = () => { setState(emptyState()); setView('client'); setMode('local'); setFresh(false); };
@@ -236,7 +244,7 @@ export function HubProvider({ children }: { children: ReactNode }) {
   return (
     <HubCtx.Provider value={{
       ready, mode, view, state, account, fresh, problem, set, toast, setView, startFresh, startDemo, previewCoach,
-      showLogin: () => setMode('login'), completeOnboarding, resetDemo, deleteEverything, leave, theme, toggleTheme,
+      showLogin: () => setMode('login'), completeOnboarding, resetDemo, deleteEverything, leave, theme, toggleTheme, refreshAccount,
     }}>
       {children}
       <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2 pointer-events-none">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowRight, Check, Copy, LayoutTemplate, Lock, MailOpen, RotateCw, Send, Users } from 'lucide-react';
+import { ArrowRight, Check, Copy, Crown, LayoutTemplate, Lock, MailOpen, RotateCw, Send, Users } from 'lucide-react';
 import { Avatar, CardTitle, Empty, Field, PageHeader, Ring } from '../components/ui';
 import { DateInput, Select } from '../components/controls';
 import { MEMBER_TONES } from '../lib/theme';
@@ -113,7 +113,7 @@ export function CoachClients() {
                     <div className="flex items-start gap-3 mb-4">
                       <Avatar name={c.name} tone={MEMBER_TONES[i % MEMBER_TONES.length]} size={44} />
                       <div className="flex-1 min-w-0">
-                        <div className="font-serif text-lg leading-tight truncate group-hover:text-teal transition">{c.name}</div>
+                        <div className="font-serif text-lg leading-tight truncate group-hover:text-teal transition flex items-center gap-1.5">{c.name}{(c.membership === 'active' || c.membership === 'trialing') && <Crown size={14} className="text-gold shrink-0" aria-label="Member" />}</div>
                         <div className="text-xs muted truncate">{c.email}</div>
                       </div>
                       <div onClick={(e) => e.stopPropagation()}><AccessPill id={c.id} access={c.access} onChange={setAccess} /></div>

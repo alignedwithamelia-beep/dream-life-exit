@@ -1,5 +1,6 @@
 import type { Contact, Doc, Folder, HubDate, HubState, Member, Plan, Priority, Profile, Task, Week } from './types';
 import { addDays, todayISO } from './logic';
+import { demoClub } from './clubDemo';
 
 export const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 
@@ -143,7 +144,7 @@ export function emptyState(): HubState {
     version: 1, onboarded: false, profile: emptyProfile(), members: [], tasks: defaultTasks(), plan: starterPlan(),
     folders: defaultFolders(), docs: [], dates: [],
     planner: { vision: '', values: ['', '', '', '', ''], prompts: {}, ahead: { m12: '', m18: '', m24: '' }, milestones: [], journal: [] },
-    contacts: officialContacts(), coach: { clients: [] },
+    contacts: officialContacts(), coach: { clients: [] }, club: demoClub(),
   };
 }
 

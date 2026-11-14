@@ -40,7 +40,7 @@ export function useCoach() {
         id: p.id, name: p.full_name || p.email || 'Client', email: p.email ?? '', access: p.access, sessionDate: p.session_date ?? '',
         week: s?.plan ? (s.plan as Plan).currentWeek : null,
         pct: s && s.checklist_total ? Math.round((s.checklist_done / s.checklist_total) * 100) : 0, live: true,
-        plan: (s?.plan as Plan) ?? undefined, summary: (s?.summary as ClientSummary) ?? null, lastActive: s?.updated_at ?? '',
+        plan: (s?.plan as Plan) ?? undefined, summary: (s?.summary as ClientSummary) ?? null, lastActive: s?.updated_at ?? '', membership: p.membership ?? 'none',
       };
     }));
     setLoading(false);
@@ -50,7 +50,7 @@ export function useCoach() {
 
   const localClients: CoachClient[] = state.coach.clients.map((c) =>
     c.live
-      ? { ...c, week: state.plan.currentWeek, pct: checklistStats(state.tasks).pct, plan: state.plan, summary: buildSummary(state), lastActive: new Date().toISOString() }
+      ? { ...c, week: state.plan.currentWeek, pct: checklistStats(state.tasks).pct, plan: state.plan, summary: buildSummary(state), lastActive: new Date().toISOString(), membership: state.club.member ? 'active' : 'none' }
       : c);
 
   const clients = remote ? remoteClients : localClients;

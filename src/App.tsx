@@ -15,6 +15,8 @@ import Contacts from './screens/Contacts';
 import Household from './screens/Household';
 import { CoachClients, CoachPlan } from './screens/Coach';
 import CoachClient from './screens/CoachClient';
+import Library from './screens/Library';
+import Community from './screens/Community';
 
 function ScrollTop() {
   const { pathname } = useLocation();
@@ -69,6 +71,8 @@ export default function App() {
           <Route path="/coach" element={<CoachClients />} />
           <Route path="/coach/client/:id" element={<CoachClient />} />
           <Route path="/coach/plan/:id" element={<CoachPlan />} />
+          <Route path="/library" element={<Library />} />
+          <Route path="/community" element={<Community />} />
           <Route path="*" element={<Navigate to="/coach" replace />} />
         </Routes>
       </Shell>
@@ -88,6 +92,8 @@ export default function App() {
         <Route path="/dates" element={<Dates />} />
         <Route path="/planner" element={<Planner />} />
         <Route path="/contacts" element={<Contacts />} />
+        <Route path="/library" element={<Library />} />
+        <Route path="/community" element={<Community />} />
         <Route path="/household" element={<Household />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

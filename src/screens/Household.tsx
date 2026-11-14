@@ -8,6 +8,7 @@ import { fmtDate } from '../lib/logic';
 import { useHub } from '../lib/store';
 import type { Member, Profile } from '../lib/types';
 import { ProfileForm } from './Onboarding';
+import { MembershipCard } from '../components/Membership';
 
 export default function Household() {
   const { state, set, toast, mode, resetDemo, deleteEverything } = useHub();
@@ -101,6 +102,11 @@ export default function Household() {
             <ul className="text-sm space-y-1.5 list-disc pl-5"><li>Document Vault</li><li>Dream Life Planner and journal</li><li>Contacts and dates</li><li>Task notes, links and household names</li></ul>
           </div>
         </div>
+      </section>
+
+      <section>
+        <h2 className="text-xl mb-3">Membership</h2>
+        <MembershipCard compact />
       </section>
 
       <section className="card">

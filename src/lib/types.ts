@@ -60,7 +60,7 @@ export type Access = 'active' | 'invited' | 'paused';
 export type CoachClient = {
   id: string; name: string; email: string; access: Access; sessionDate: string;
   week: number | null; pct: number; live: boolean; plan?: Plan;
-  summary?: ClientSummary | null; lastActive?: string;
+  summary?: ClientSummary | null; lastActive?: string; membership?: Membership;
 };
 
 export type HubState = {
@@ -76,6 +76,7 @@ export type HubState = {
   planner: Planner;
   contacts: Contact[];
   coach: { clients: CoachClient[] };
+  club: ClubDemo;
 };
 
 /** What a client shares with their coach besides the plan: answers and progress, never documents, dates, journal or contacts. */
@@ -89,3 +90,24 @@ export type ClientSummary = {
   };
   updatedAt: string;
 };
+
+/* ---------- Membership, library and community ---------- */
+
+export type Membership = 'none' | 'trialing' | 'active' | 'past_due' | 'canceled';
+export type LibraryKind = 'lesson' | 'video' | 'worksheet' | 'replay' | 'course';
+
+export type LibraryItem = {
+  id: string; title: string; summary: string; kind: LibraryKind; category: string;
+  locked: boolean; published: boolean; sort: number; created_at?: string;
+};
+export type LibraryContent = { body: string; video_url: string; file_path?: string | null; file_name?: string | null };
+
+export type Reaction = { post_id: string; user_id: string; emoji: 'heart' | 'clap' | 'sparkle' };
+export type PostComment = { id: string; post_id: string; author_id: string; author_name: string; author_role: string; body: string; created_at: string };
+export type Post = {
+  id: string; author_id: string; author_name: string; author_role: string; body: string; pinned: boolean;
+  created_at: string; edited_at?: string | null; comments: PostComment[]; reactions: Reaction[];
+};
+
+/** Demo-only copy of the members' area (the real one lives in Supabase). */
+export type ClubDemo = { member: boolean; library: (LibraryItem & { content: LibraryContent })[]; posts: Post[] };

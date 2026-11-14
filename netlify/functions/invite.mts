@@ -39,10 +39,11 @@ export default async (req: Request) => {
   const siteOrigin = process.env.URL ? new URL(process.env.URL).origin : new URL(SITE_URL).origin;
   const redirectTo = known.includes(origin) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ? origin : siteOrigin;
 
-  const options = { data: { full_name: name, session_date: sessionDate ?? '' }, redirectTo };
+  // Trailing slash so it matches Supabase's Redirect URLs ("http://localhost:5173/**"); otherwise Supabase falls back to the Site URL.
+  const options = { data: { full_name: name, session_date: sessionDate ?? '' }, redirectTo: `${redirectTo}/` };
   let { data: link, error } = await admin.auth.admin.generateLink({ type: 'invite', email, options });
   if (error && /already/i.test(error.message)) {
-    ({ data: link, error } = await admin.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo } }));
+    ({ data: link, error } = await admin.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo: `${redirectTo}/` } }));
   }
   if (error || !link?.user) return json({ error: error?.message ?? 'Couldn’t create the invitation.' }, 400);
 

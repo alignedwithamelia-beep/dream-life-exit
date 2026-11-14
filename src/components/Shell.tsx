@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  BookHeart, CalendarDays, CheckSquare, Contact, FolderLock, Home, LogOut, Map, MoreHorizontal, Plane, Repeat, UserRound, Users,
+  BookHeart, CalendarDays, CheckSquare, Contact, FolderLock, Home, Library, LogOut, Map, MessagesSquare, MoreHorizontal, Plane, Repeat, UserRound, Users,
 } from 'lucide-react';
 import { Logo, Modal, ThemeToggle, WaveBand } from './ui';
 import { useHub } from '../lib/store';
@@ -16,14 +16,20 @@ export const CLIENT_NAV: Item[] = [
   { to: '/vault', label: 'Document Vault', short: 'Vault', icon: <FolderLock size={18} />, group: 'Organise' },
   { to: '/dates', label: 'Important Dates', icon: <CalendarDays size={18} />, group: 'Organise' },
   { to: '/contacts', label: 'Contacts & Links', icon: <Contact size={18} />, group: 'Organise' },
-  { to: '/planner', label: 'Dream Life Planner', icon: <BookHeart size={18} />, group: 'Dream' },
+  { to: '/planner', label: 'Dream Life Planner', icon: <BookHeart size={18} />, group: 'Grow' },
+  { to: '/library', label: 'Members’ Library', short: 'Library', icon: <Library size={18} />, group: 'Grow' },
+  { to: '/community', label: 'Community', icon: <MessagesSquare size={18} />, group: 'Grow' },
   { to: '/household', label: 'Household & Profile', icon: <UserRound size={18} />, group: 'You' },
 ];
 
-const COACH_NAV: Item[] = [{ to: '/coach', label: 'My clients', icon: <Users size={18} />, group: '' }];
+const COACH_NAV: Item[] = [
+  { to: '/coach', label: 'My clients', short: 'Clients', icon: <Users size={18} />, group: '' },
+  { to: '/library', label: 'Members’ Library', short: 'Library', icon: <Library size={18} />, group: 'Members' },
+  { to: '/community', label: 'Community', icon: <MessagesSquare size={18} />, group: 'Members' },
+];
 
 const navCls = ({ isActive }: { isActive: boolean }) =>
-  `relative flex items-center gap-3 rounded-xl px-3.5 py-2 text-[14px] transition ${isActive
+  `relative flex items-center gap-3 rounded-xl px-3.5 py-[7px] text-[14px] transition ${isActive
     ? 'bg-white/10 text-white font-semibold [&_svg]:text-gold before:absolute before:-left-5 before:top-2 before:bottom-2 before:w-1 before:rounded-r-full before:bg-gold'
     : 'text-white/70 hover:bg-white/5 hover:text-white'}`;
 
@@ -57,7 +63,7 @@ export default function Shell({ coach, children }: { coach?: boolean; children: 
 
   const footer = (
     <div className="space-y-1.5">
-      <div className="flex items-center justify-between rounded-full bg-white/[0.04] border border-white/10 pl-4 pr-1 py-1 mb-2">
+      <div className="flex items-center justify-between rounded-full bg-white/[0.04] border border-white/10 pl-4 pr-1 py-1 mb-1.5">
         <span className="text-xs text-white/70">{theme === 'dark' ? 'Night mode' : 'Day mode'}</span>
         <ThemeToggle onDark />
       </div>
@@ -66,10 +72,10 @@ export default function Shell({ coach, children }: { coach?: boolean; children: 
           <Repeat size={15} /> {coach ? 'Switch to client view' : 'Preview coach view'}
         </button>
       )}
-      <button onClick={() => { leave(); navigate('/'); }} className="w-full flex items-center gap-2 justify-center rounded-full px-4 py-1.5 text-xs text-white/55 hover:text-white cursor-pointer">
+      <button onClick={() => { leave(); navigate('/'); }} className="w-full flex items-center gap-2 justify-center rounded-full px-4 py-1 text-xs text-white/55 hover:text-white cursor-pointer">
         <LogOut size={13} /> {isRemote ? 'Sign out' : 'Back to welcome screen'}
       </button>
-      <div className="text-[10.5px] text-white/35 text-center tracking-wide">{isRemote ? account?.email : 'Prototype · demo data'}</div>
+      <div className="text-[10.5px] text-white/35 text-center tracking-wide [@media(max-height:760px)]:hidden">{isRemote ? account?.email : 'Prototype · demo data'}</div>
     </div>
   );
 
@@ -85,18 +91,18 @@ export default function Shell({ coach, children }: { coach?: boolean; children: 
     <div className="min-h-screen md:flex">
       <aside className="hidden md:flex flex-col w-[264px] shrink-0 bg-sidebar sticky top-0 h-screen overflow-hidden"
         style={{ backgroundImage: 'radial-gradient(400px 260px at 0% 0%, rgba(184,145,58,0.14), transparent 70%)' }}>
-        <div className="px-6 pt-6 pb-5"><Logo /></div>
-        <nav className="flex-1 min-h-0 overflow-y-auto px-5 space-y-3">
+        <div className="px-6 pt-5 pb-4"><Logo /></div>
+        <nav className="flex-1 min-h-0 overflow-y-auto px-5 space-y-2.5">
           {groups.map(([g, list]) => (
             <div key={g || 'main'}>
-              {g && <div className="px-3.5 pb-1.5 text-[10px] tracking-[0.22em] font-bold text-white/35 uppercase">{g}</div>}
+              {g && <div className="px-3.5 pb-1 text-[10px] tracking-[0.22em] font-bold text-white/35 uppercase">{g}</div>}
               <div className="space-y-0.5">
-                {list.map((i) => <NavLink key={i.to} to={i.to} end={i.to === '/'} className={navCls}>{i.icon}{i.label}</NavLink>)}
+                {list.map((i) => <NavLink key={i.to} to={i.to} end={i.to === '/' || i.to === '/coach'} className={navCls}>{i.icon}{i.label}</NavLink>)}
               </div>
             </div>
           ))}
         </nav>
-        <div className="px-5 pt-3 pb-4 relative z-10">
+        <div className="px-5 pt-2 pb-3 relative z-10">
           {!coach && <JourneyMini />}
           {footer}
         </div>

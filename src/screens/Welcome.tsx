@@ -170,7 +170,7 @@ function Login() {
     if (!supabase) return;
     setState('sending');
     const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(), options: { shouldCreateUser: false, emailRedirectTo: window.location.origin },
+      email: email.trim(), options: { shouldCreateUser: false, emailRedirectTo: `${window.location.origin}/` },
     });
     if (error) {
       const m = error.message;
